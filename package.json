@@ -1,0 +1,51 @@
+{
+  "name": "insta-unfollow-cli",
+  "version": "1.0.0",
+  "description": "Find Instagram accounts that don't follow you back and unfollow them. Uses Instagram's internal API — no scraping, no browser automation.",
+  "keywords": [
+    "instagram",
+    "unfollow",
+    "followers",
+    "following",
+    "cli",
+    "social-media",
+    "instagram-api",
+    "unfollowers"
+  ],
+  "author": "Gonzalo López Gil <gonzalopezgil@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gonzalopezgil/insta-unfollow-cli.git"
+  },
+  "homepage": "https://github.com/gonzalopezgil/insta-unfollow-cli#readme",
+  "bugs": {
+    "url": "https://github.com/gonzalopezgil/insta-unfollow-cli/issues"
+  },
+  "type": "module",
+  "bin": {
+    "insta-unfollow": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
