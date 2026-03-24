@@ -214,13 +214,18 @@ export async function verifyProfiles(
 
 /**
  * Unfollow a single user.
+ *
+ * IMPORTANT: Uses /api/v1/friendships/destroy/ endpoint, NOT /web/friendships/.
+ * The /web/ endpoint returns HTTP 200 but silently fails to unfollow.
+ * The /api/v1/ endpoint returns the actual friendship_status in the response body,
+ * which we verify to confirm the unfollow actually happened.
  */
 export async function unfollowUser(
   auth: AuthConfig,
   userId: string,
   username: string,
 ): Promise<UnfollowResult> {
-  const url = `https://www.instagram.com/web/friendships/${userId}/unfollow/`;
+  const url = `https://www.instagram.com/api/v1/friendships/destroy/${userId}/`;
 
   try {
     const response = await fetch(url, {
@@ -244,7 +249,14 @@ export async function unfollowUser(
       return { username, user_id: userId, success: false, error: `HTTP ${response.status}` };
     }
 
-    return { username, user_id: userId, success: true };
+    // Verify the unfollow actually worked by checking the response body
+    const body = await response.json() as { friendship_status?: { following?: boolean } };
+    if (body?.friendship_status?.following === false) {
+      return { username, user_id: userId, success: true };
+    }
+
+    // Response was 200 but friendship_status says still following — silent failure
+    return { username, user_id: userId, success: false, error: 'API returned 200 but unfollow did not take effect' };
   } catch (error) {
     return {
       username,
