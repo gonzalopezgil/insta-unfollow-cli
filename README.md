@@ -51,7 +51,10 @@ insta-unfollow scan
 # 3. Check who doesn't follow you back
 insta-unfollow check --skip-verified
 
-# 4. Unfollow them (interactive, 10 at a time)
+# 4. Generate a Markdown report with profile links to review
+insta-unfollow report
+
+# 5. Unfollow them (interactive, 10 at a time)
 insta-unfollow unfollow --batch 10
 ```
 
@@ -212,6 +215,40 @@ insta-unfollow offline followers_1.json following.json
   Mutual followers: 1650
   Follow-back ratio: 75.0%
 ```
+
+### `report` — Markdown Report with Profile Links
+
+Generate a Markdown file listing all non-followers with clickable links to their Instagram profiles. Perfect for reviewing who each person is before deciding to unfollow.
+
+```bash
+# Generate report from last scan (fast — no API calls)
+insta-unfollow report
+
+# Verify each account via API first (slower but catches stale data)
+insta-unfollow report --verify
+
+# Skip verified accounts
+insta-unfollow report --skip-verified
+
+# Custom output file
+insta-unfollow report --output my-report.md
+```
+
+The generated report looks like this:
+
+```markdown
+# Instagram Non-Followers Report
+
+> **Generated:** 2026-03-24 11:30 UTC | **Following:** 2200 | **Follow back:** 1650 | **Don't follow back:** 550
+
+| # | Username | Name | Verified |
+|--:|----------|------|:--------:|
+| 1 | [@someuser](https://instagram.com/someuser) | Some Person | |
+| 2 | [@brand](https://instagram.com/brand) | Brand Name | ✅ |
+...
+```
+
+Each username links directly to their Instagram profile — click to review before unfollowing.
 
 ### `stats` — Account Summary
 

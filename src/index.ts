@@ -5,13 +5,14 @@ import { checkCommand } from './commands/check.js';
 import { unfollowCommand } from './commands/unfollow.js';
 import { offlineCommand } from './commands/offline.js';
 import { statsCommand } from './commands/stats.js';
+import { reportCommand } from './commands/report.js';
 
 const program = new Command();
 
 program
   .name('insta-unfollow')
   .description('Find Instagram accounts that don\'t follow you back and unfollow them.')
-  .version('1.0.0');
+  .version('1.1.0');
 
 // Login command
 program
@@ -74,6 +75,20 @@ program
   .option('--json', 'Output as JSON')
   .action(async (followers, following, options) => {
     await offlineCommand(followers, following, options);
+  });
+
+// Report command
+program
+  .command('report')
+  .description('Generate a Markdown report of non-followers with profile links')
+  .option('--cookies <string>', 'Cookie string (overrides saved config)')
+  .option('--skip-verified', 'Skip verified accounts (celebrities, brands)')
+  .option('--verify', 'Verify each account via API before including (slower but accurate)')
+  .option('-i, --input <path>', 'Scan results file to use')
+  .option('-o, --output <path>', 'Output file path (default: non-followers-YYYY-MM-DD.md)')
+  .option('--json', 'Output as JSON')
+  .action(async (options) => {
+    await reportCommand(options);
   });
 
 // Stats command
